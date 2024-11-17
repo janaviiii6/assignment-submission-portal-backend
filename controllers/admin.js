@@ -20,15 +20,16 @@ const viewAllAssignments = async (req,res) => {
 
         console.log(adminName);
 
-        const assignments = await Assignment.find({ admin: adminName })
+        const assignments = await Assignment.find({ admin: userId })
                 .populate('userId', 'name')
+                .populate('admin', 'name')
                 .lean();
 
         const assignmentDetails = assignments.map(assignment => ({
             _id: assignment._id,
             userName: assignment.userId.name,
             task: assignment.task,
-            admin: assignment.admin,
+            admin: assignment.admin.name,
             status: assignment.status,
             createdAt: assignment.createdAt,
             updatedAt: assignment.updatedAt,
@@ -48,4 +49,4 @@ const viewAllAssignments = async (req,res) => {
     }
 };
 
-module.exports = { viewAllAssignments };
+module.exports = { viewAllAssignments, acceptAssignment };

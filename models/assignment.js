@@ -11,12 +11,13 @@ const assignmentSchema = new mongoose.Schema({
             required: true
         },
         admin: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true
         },
         status: {
             type: String,
-            enum: ['pending','accept','reject'],
+            enum: ['pending','accepted','rejected'],
             default: 'pending'
         },
     },

@@ -22,13 +22,15 @@ const getAllAdmins = async (req,res) => {
 }
 
 const uploadAssignment = async (req,res) => {
-    const { task, admin } = req.body;
+    const { task, admin: adminName } = req.body;
     const userId = req.user.userId;
     
     console.log(userId);
     console.log(req.body);
     
     try{
+
+        const admin = await User.findOne({ name: adminName }).select('_id');
 
         const user = await User.findById(userId).select('name');
 
@@ -38,7 +40,7 @@ const uploadAssignment = async (req,res) => {
         await Assignment.create({
             userId,
             task,
-            admin,
+            admin: admin._id,
         });
 
         res.status(201).json({ message: "Assignment uploaded successfully!" });
