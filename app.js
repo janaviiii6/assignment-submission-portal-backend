@@ -11,12 +11,15 @@ app.use(cors());
 
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+const adminRoute = require("./routes/admin");
 
 //Middleware
 const { authenticateJWT } = require("./middlewares/auth");
+const { checkAdmin } = require("./middlewares/checkAdmin")
 
 app.use("/auth",authRoute);
 app.use("/users",authenticateJWT,userRoute);
+app.use("/admin",authenticateJWT,checkAdmin,adminRoute);
 
 // Database connection 
 const mongoDBURL = process.env.MONGODB_URL;
