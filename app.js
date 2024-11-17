@@ -9,17 +9,20 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const userRoute = require("./routes/user");
+
+app.use("/",userRoute);
 
 // Database connection 
 const mongoDBURL = process.env.MONGODB_URL;
 mongoose
-    .connect(mongoDBURL)
-    .then(() => {
-        console.log("Connected to Database");
-    })
-    .catch((err) => {
-        console.error("Database connection failed: ", err);
-    });
+.connect(mongoDBURL)
+.then(() => {
+    console.log("Connected to Database");
+})
+.catch((err) => {
+    console.error("Database connection failed: ", err);
+});
 
 
 //Listen to the Server
