@@ -1,9 +1,15 @@
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const handleUserRegister = async (req,res) => {
     const { name, email, password, role } = req.body;
-    console.log(req.body);
     try{
+
+        //Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if(existingUser)
+            return res.status(400).json({ message: "User already exists" });
+
         //Create new user
         const newUser = await User.create({
             name,
@@ -12,11 +18,10 @@ const handleUserRegister = async (req,res) => {
             role
         });
 
-
         res.status(201).json({
             message: "User registered successfully!",
-            data: newUser
-        })
+            data: newUser,
+        });
     }
     catch(err) {
         //Hanlde errors
@@ -43,7 +48,14 @@ const handleUserLogin = async (req,res) => {
         if(!isPasswordValid)
             res.status(401).json({ message: "Invalid email or password" });
 
-        res.status(200).json({ message: "Login Successful!"});
+        //Generate Token
+        const token = user.generateAuthToken();
+
+
+        res.status(200).json({ 
+            message: "Login Successful!",
+            token: token
+        });
     } 
     catch(err) {
         console.error("Error during login:", err);
