@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Assignment = require("../models/assignment");
 
 // normal routes function
 const getAllAdmins = async (req,res) => {
@@ -20,5 +21,32 @@ const getAllAdmins = async (req,res) => {
     }
 }
 
+const uploadAssignment = async (req,res) => {
+    const { task, admin } = req.body;
+    const userId = req.user.userId;
+    
+    console.log(userId);
+    console.log(req.body);
+    
+    try{
 
-module.exports = { getAllAdmins };
+        const user = await User.findById(userId).select('name');
+
+        if(!user)
+            return res.status(404).json({ message: "User not found" })
+
+        await Assignment.create({
+            userId,
+            task,
+            admin,
+        });
+
+        res.status(201).json({ message: "Assignment uploaded successfully!" });
+    }
+    catch(err) {
+        console.error("Error uploading assignment: ", err);
+        res.status(500).json({ message: "Error uploading assignment. Please try again later." });
+    }
+};  
+
+module.exports = { getAllAdmins, uploadAssignment };
