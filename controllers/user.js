@@ -9,14 +9,14 @@ const getAllAdmins = async (req,res) => {
         if(admins.length === 0)
             return res.status(404).json({ message: "No admins found." });
 
-        res.status(200).json({
+        return res.status(200).json({
             message: "Admins fetched successfully!",
             admins
         });
     }
     catch(err) {
         console.error("Error fetching admins: ", err);
-        res.status(500).json({ message: "Server error" });  
+        return res.status(500).json({ message: "Server error" });  
 
     }
 }
@@ -43,11 +43,11 @@ const uploadAssignment = async (req,res) => {
             admin: admin._id,
         });
 
-        res.status(201).json({ message: "Assignment uploaded successfully!" });
+        return res.status(201).json({ message: "Assignment uploaded successfully!" });
     }
     catch(err) {
         console.error("Error uploading assignment: ", err);
-        res.status(500).json({ message: "Error uploading assignment. Please try again later." });
+        return res.status(500).json({ message: "Error uploading assignment. Please try again later." });
     }
 };  
 

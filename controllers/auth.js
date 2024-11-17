@@ -21,7 +21,7 @@ const handleUserRegister = async (req,res) => {
             role
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "User registered successfully!",
             data: newUser,
         });
@@ -32,7 +32,7 @@ const handleUserRegister = async (req,res) => {
             return res.status(400).json({ message: err.message });
 
         console.error("Error during registration: ", err);
-        res.status(500).json({ message: "Server error, please try again." });
+        return res.status(500).json({ message: "Server error, please try again." });
     }
 };
 
@@ -49,20 +49,20 @@ const handleUserLogin = async (req,res) => {
 
         const isPasswordValid = await user.comparePassword(password);
         if(!isPasswordValid)
-            res.status(401).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
 
         //Generate Token
         const token = user.generateAuthToken();
 
 
-        res.status(200).json({ 
+        return res.status(200).json({ 
             message: "Login Successful!",
             token: token
         });
     } 
     catch(err) {
         console.error("Error during login:", err);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
