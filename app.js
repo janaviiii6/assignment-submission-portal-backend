@@ -9,9 +9,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 
-app.use("/",userRoute);
+//Middleware
+const { authenticateJWT } = require("./middlewares/auth");
+
+app.use("/auth",authRoute);
+app.use("/users",authenticateJWT,userRoute);
 
 // Database connection 
 const mongoDBURL = process.env.MONGODB_URL;
